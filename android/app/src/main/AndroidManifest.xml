@@ -8,10 +8,22 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
+
+     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> // imp
+
+     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+
    <application
         android:label="raw_testing"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBw8rQ5Q5VxTK_ZF64NanUHfJhMXLAQlYc" />  // imp
+
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
