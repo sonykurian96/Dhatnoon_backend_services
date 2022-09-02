@@ -2,17 +2,18 @@ import 'package:agora_uikit/agora_uikit.dart';
 import 'package:agora_uikit/controllers/rtc_buttons.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 
-class Intermediate extends StatefulWidget {
+import 'main.dart';
 
+class Intermediate extends StatefulWidget {
   @override
   State<Intermediate> createState() => _IntermediateState();
 }
 
 class _IntermediateState extends State<Intermediate> {
-
   String? token;
 
   @override
@@ -26,20 +27,19 @@ class _IntermediateState extends State<Intermediate> {
         "https://agora-node-tokenserver.davidcaleb.repl.co/access_token?channelName=test";
     Response response = await get(Uri.parse(link));
     Map data = jsonDecode(response.body);
-    setState((){
+    setState(() {
       token = data["token"];
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if(token != null)
-    return AgoraVideoCall(token: token!);
+    if (token != null)
+      return AgoraVideoCall(token: token!);
     else
       return Center(child: CircularProgressIndicator());
   }
 }
-
 
 class AgoraVideoCall extends StatefulWidget {
   const AgoraVideoCall({Key? key, required this.token}) : super(key: key);
@@ -51,7 +51,6 @@ class AgoraVideoCall extends StatefulWidget {
 }
 
 class _AgoraVideoCallState extends State<AgoraVideoCall> {
-
   late final AgoraClient client;
 
   @override
@@ -61,6 +60,11 @@ class _AgoraVideoCallState extends State<AgoraVideoCall> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    // Dispose of the controller when the widget is disposed.
+    super.dispose();
+  }
 
   void setClient() async {
     client = AgoraClient(
@@ -68,8 +72,8 @@ class _AgoraVideoCallState extends State<AgoraVideoCall> {
           appId: "63a29f76b5704dd0bf01316fc9f8f736",
           channelName: "test",
           tempToken: widget.token
-        // username: "user",
-      ),
+          // username: "user",
+          ),
     );
   }
 
@@ -80,17 +84,17 @@ class _AgoraVideoCallState extends State<AgoraVideoCall> {
   @override
   Widget build(BuildContext context) {
 
-    // final lensDirection =  widget.scontroller.description.lensDirection;
-    // if(lensDirection == CameraLensDirection.front){
-    //   Future.delayed(Duration(seconds: 2), () {
-    //     switchCamera(sessionController: client.sessionController);
-    //   });
-    //}
+    if(count == 0) {
+      Future.delayed(Duration(seconds: 2), () {
+        switchCamera(sessionController: client.sessionController);
+      });
+      count = count + 1;
+    }
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Front camera streaming',
+            'Rear camera streaming',
             style: TextStyle(color: Colors.white),
           ),
           centerTitle: true,
@@ -116,26 +120,6 @@ class _AgoraVideoCallState extends State<AgoraVideoCall> {
                 layoutType: Layout.floating,
                 enableHostControls: true, // Add this to enable host controls
               ),
-              AgoraVideoButtons(
-                  client: client,
-                  autoHideButtons: false,
-                  enabledButtons: [
-                    BuiltInButtons.callEnd
-                  ],
-                  extraButtons: [
-                    ElevatedButton(
-                      onPressed: () {
-
-                      },
-                      child: const Text('switch'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-
-                      },
-                      child: const Text('camera'),
-                    ),
-                  ]),
             ],
           ),
         ),
