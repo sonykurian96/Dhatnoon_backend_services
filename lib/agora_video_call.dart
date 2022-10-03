@@ -24,7 +24,7 @@ class _IntermediateState extends State<Intermediate> {
 
   getCode() async {
     String link =
-        "https://agora-node-tokenserver.davidcaleb.repl.co/access_token?channelName=test";
+        "serverURL";
     Response response = await get(Uri.parse(link));
     Map data = jsonDecode(response.body);
     setState(() {
@@ -69,7 +69,7 @@ class _AgoraVideoCallState extends State<AgoraVideoCall> {
   void setClient() async {
     client = AgoraClient(
       agoraConnectionData: AgoraConnectionData(
-          appId: "63a29f76b5704dd0bf01316fc9f8f736",
+          appId: "appid",
           channelName: "test",
           tempToken: widget.token
           // username: "user",
